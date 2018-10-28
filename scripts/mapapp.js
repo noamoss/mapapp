@@ -32,7 +32,7 @@ function onMapClick(e) {
 
 mymap.on('click', onMapClick);
 
-$("a#spreadsheetUrl").attr("href",config.GOOGLE_SPREADSHEET_URL).attr("target","_blank");
+$("#spreadsheetUrl").attr("href",config.GOOGLE_SPREADSHEET_URL).attr("target","_blank");
 
 $(document).ready(function (e){
   var jqxhr = $.ajax({                             // call the google spreadsheet to get markers
