@@ -38,11 +38,9 @@ map.on('locationerror', onLocationError);  // when map is loaded, run onLocation
 var currentLocation = document.getElementById("currentLocationBtn").addEventListener("click",getLocation); // function to run when the main button is clicked
 
 function getLocation(e) {                                // check if the user's geolocation was saved
-
     if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(addStory);
           $("#addStory").modal('toggle');
-
     } else {
       alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
     }
@@ -91,19 +89,25 @@ var $form = $('form#storyForm')[0],                             // preapre to th
 
 $('#submit').on('click', function(e) {       // ajax call to the google spreadsheet (temporary)
   e.preventDefault();
+  var toSave = objectifyForm($form);
   var jqxhr = $.ajax({
     url: writeUrl,
     method: "GET",
     dataType: "json",
-    data: objectifyForm($form),
+    data: toSave,
     success:
     function() {
-        alert("הסיפור נשמר!");
-        $("#addStory").modal('hide');
+        alert("הסיפור נשמר!");        // update user the item was saved
+        $("#addStory").modal('hide'); // close modal only after saving confimration
+        var marker = L.marker([toSave.latitude, toSave.longitude]).addTo(map).bindPopup("<b>הסיפור: </b>"+toSave.storyField); // add manually the new marker to the map
+        marker.openPopup(); // show the new marker on the map
+        $("#storyField.input").val(""); // clear the form field(s) for the next time
       }
     }
   );
 })
+
+
 
 $("a#spreadsheetUrl").attr("href",config.GOOGLE_SPREADSHEET_URL).attr("target","_blank");
 
