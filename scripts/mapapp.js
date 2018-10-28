@@ -1,6 +1,3 @@
-// this file to set the leaflat Map service
-
-
 //first import the mapbox access token from the local env, saved in the config.js file
 var mapbox_access_token = config.MAPBOX_ACCESS_TOKEN;
 
@@ -15,11 +12,6 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: mapbox_access_token
 }).addTo(mymap);
 
-
-function onMapClick(e) {
-    alert("לחצת על המפה ב: " + e.latlng.latitude +", "+e.latlng.longitude);
-}
-
 var popup = L.popup();
 
 function onMapClick(e) {
@@ -32,7 +24,7 @@ function onMapClick(e) {
 
 mymap.on('click', onMapClick);
 
-$("#spreadsheetUrl").attr("href",config.GOOGLE_SPREADSHEET_URL).attr("target","_blank");
+$("a#spreadsheetUrl").attr("href",config.GOOGLE_SPREADSHEET_URL).attr("target","_blank");
 
 $(document).ready(function (e){
   var jqxhr = $.ajax({                             // call the google spreadsheet to get markers
@@ -41,12 +33,11 @@ $(document).ready(function (e){
     dataType: "json",
     success:
       function(e) {
-        var markers = e.values.slice(1) // ignore the headers
-                                                    //addMarkers(markers);
-        for (let i=0; i<=markers.length-1; i++) {
-          var marker = L.marker([markers[i][1],markers[i][0]]).addTo(mymap).bindPopup("<b>הסיפור: </b>"+markers[i][2])
+        var markers = e.values.slice(1); // ignore the headers
+        for (var i=0; i<=markers.length-1; i++) {
+          var marker = L.marker([markers[i][1],markers[i][0]]).addTo(mymap).bindPopup("<b>הסיפור: </b>"+markers[i][2]);
           marker.openPopup();
         }
       }
-  })
+  });
 });

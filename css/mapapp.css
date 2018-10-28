@@ -1,4 +1,4 @@
-#mapid { height: 50%; }
+#mapid { height: 50vh; }
 
 html, body, #map {
   direction: rtl;
