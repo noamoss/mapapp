@@ -127,7 +127,6 @@ $(document).ready(function(e){
 function updatePosition() {
   map.locate({setView: true, maxZoon: 16});
   setTimeout(updatePosition, 10000);
-  console.log("ping");
 }
 
 updatePosition();                               // update user current location every
