@@ -35,35 +35,26 @@ function onLocationError(e) {                                      // tell user 
 
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
 
-var currentLocation = document.getElementById("currentLocationBtn").addEventListener("click",getLocation); // function to run when the main button is clicked
+document.getElementById("currentLocationBtn").addEventListener("click",function(){
+                                                                              getCurrentLocation();
+                                                                            });
+// function to run when the main button is clicked
 
-function getLocation(e) {                                // check if the user's geolocation was saved
+function getCurrentLocation(location) {                                // check if the user's geolocation was saved
     if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(addStory);
-          $("#addStory").modal('toggle');
+          navigator.geolocation.getCurrentPosition(addStoryOnCurrentLocation);
     } else {
       alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
     }
 }
 
 
-function addStory(message) {            // add story by extracting coords and embdiing in the modal + showing modal
-  console.log(message);
-    var lon;
-    var lat;
-  if (typeof(message.coords) == "undefined")   {  // first part handles clicks on the map:
-     lon = message[0];
-    lat = message[1];
-  }
-  else
-  {                                         // in case the main app button was clicked instead of the map
-    lon = message.coords.longitude;
-    lat = message.coords.latitude;
-  }
-                                      // and now to the common actions on in the modal
-    $("#longitude").val(lon);
-    $("#latitude").val(lat);
-    $("#addStory").modal("toggle");
+function addStoryOnCurrentLocation(loc) {            // add story by
+  console.log(loc);
+    var lng = loc.coords.longitude;
+    var lat = loc.coords.latitude;
+    var location = [lng, lat];
+    addStory(location);
 }
 
 map.on('click', onMapClick);                              // run onMapClick when user clicks the map
@@ -71,11 +62,16 @@ map.on('click', onMapClick);                              // run onMapClick when
 function onMapClick(e) {                           // actions to run when map is being clicked
   var lng = e.latlng.lng;
   var lat =  e.latlng.lat;
-  var position = [lng, lat];
-  addStory(position);
+  var location = [lng, lat];
+  addStory(location);
 }
 
-
+function addStory([lng, lat]){                       // when we have the location field, we can set the modal fields values and expose to user input
+  console.log(location);
+  $("#longitude").val(lng);
+  $("#latitude").val(lat);
+  $("#addStory").modal('show');
+}
 
 function objectifyForm(formArray) {//serialize data function
 
@@ -113,6 +109,8 @@ $('#submit').on('click', function(e) {       // ajax call to the google spreadsh
 
 $("a#spreadsheetUrl").attr("href",config.GOOGLE_SPREADSHEET_URL).attr("target","_blank");
 
+map.locate({setView: true, maxZoon: 16});
+
 $(document).ready(function(e){
   var jqxhr = $.ajax({                             // call the google spreadsheet to get markers
     url: "https://sheets.googleapis.com/v4/spreadsheets/1ucX1MKPmvVbset9evcUCJ8q-Dh_DucMxmhLz76I9kHI/values/stories?key="+config.GOOGLE_SPREADSHEET_API,
@@ -126,7 +124,6 @@ $(document).ready(function(e){
           marker.openPopup();
         }
         map.locate({setView: true, maxZoon: 16});
-
       }
   });
 });
