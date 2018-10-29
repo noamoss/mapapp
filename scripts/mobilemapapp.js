@@ -36,24 +36,20 @@ function onLocationError(e) {                                      // tell user 
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
 
 document.getElementById("currentLocationBtn").addEventListener("click",function(){
-                                                                              getCurrentLocation();
+                                                                            map.locate({setView: true, maxZoon: 16});
+                                                                            addStoryOnCurrentLocation();
+                                                                            $("#addStory").modal("toggle");
                                                                             });
 // function to run when the main button is clicked
 
-function getCurrentLocation(location) {                                // check if the user's geolocation was saved
-    if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(addStoryOnCurrentLocation);
-    } else {
-      alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
-    }
-}
 
 
-function addStoryOnCurrentLocation(loc) {            // add story by
-  console.log(loc);
-    var lng = loc.coords.longitude;
-    var lat = loc.coords.latitude;
+
+function addStoryOnCurrentLocation(loc) {            // add story by the recent user location
+    var lng =   window.position.lng;
+    var lat =   window.position.lat;
     var location = [lng, lat];
+    console.log(location);
     addStory(location);
 }
 
@@ -65,25 +61,6 @@ function onMapClick(e) {                           // actions to run when map is
   var location = [lng, lat];
   addStory(location);
 }
-
-function addStory([lng, lat]){                       // when we have the location field, we can set the modal fields values and expose to user input
-  console.log(location);
-  $("#longitude").val(lng);
-  $("#latitude").val(lat);
-  $("#addStory").modal('show');
-}
-
-function objectifyForm(formArray) {//serialize data function
-
-  var returnArray = {};
-  for (var i = 0; i < formArray.length; i++){
-    returnArray[formArray[i].name] = formArray[i].value;
-  }
-  return returnArray;
-}
-
-var $form = $('form#storyForm')[0],                             // preapre to thhe ajax call to save markers
-    writeUrl = config.GOOGLE_SPREADSHEET_TABLE_URL;
 
 $('#submit').on('click', function(e) {       // ajax call to the google spreadsheet (temporary)
   e.preventDefault();
@@ -104,6 +81,27 @@ $('#submit').on('click', function(e) {       // ajax call to the google spreadsh
     }
   );
 });
+
+
+function addStory(location){                       // when we have the location field, we can set the modal fields values and expose to user input
+  $("#longitude").val(location[0]);
+  $("#latitude").val(location[1]);
+  $("#addStory").modal('show');
+}
+
+function objectifyForm(formArray) {//serialize data function
+
+  var returnArray = {};
+  for (var i = 0; i < formArray.length; i++){
+    returnArray[formArray[i].name] = formArray[i].value;
+  }
+  return returnArray;
+}
+
+var $form = $('form#storyForm')[0],                             // preapre to thhe ajax call to save markers
+    writeUrl = config.GOOGLE_SPREADSHEET_TABLE_URL;
+
+
 
 
 
