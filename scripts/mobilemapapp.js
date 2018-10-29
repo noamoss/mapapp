@@ -49,7 +49,6 @@ function addStoryOnCurrentLocation(loc) {            // add story by the recent 
     var lng =   window.position.lng;
     var lat =   window.position.lat;
     var location = [lng, lat];
-    console.log(location);
     addStory(location);
 }
 
@@ -121,7 +120,14 @@ $(document).ready(function(e){
           var marker = L.marker([markers[i][1],markers[i][0]]).addTo(map).bindPopup("<b>הסיפור: </b>"+markers[i][2]);
           marker.openPopup();
         }
-        map.locate({setView: true, maxZoon: 16});
       }
   });
 });
+
+function updatePosition() {
+  map.locate({setView: true, maxZoon: 16});
+  setTimeout(updatePosition, 10000);
+  console.log("ping");
+}
+
+updatePosition();                               // update user current location every
