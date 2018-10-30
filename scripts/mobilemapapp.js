@@ -41,6 +41,9 @@ map.on('locationfound', onLocationFound);   // when map is loaded, run onLocatio
 
 
 function onLocationError(e) {                                      // tell user their location was not found
+  if (typeof(currentLocationCircle) != "undefined") {  // first, let's clear pre-existing location indicator from map
+    map.removeLayer(currentLocationCircle);
+  }
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
 }
 
@@ -118,6 +121,6 @@ $(document).ready(function(e){
         }
       }
   });
-  map.locate({watch:false});
+  map.locate({watch:true, setView:false});
 
 });
