@@ -17,11 +17,13 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(map);
 
 var popup = L.popup();                               // create a pop-up object
-
+var currentLocation;
 
 function onLocationFound(e) {               // when map loads, try defining user's locaition and show on map (with radius)
-    var radius = e.accuracy / 2;
-    L.circle(e.latlng, radius, {color: "red", opacity: 0.5, fillColor: '#f03'}).addTo(map).bindPopup("אתם נמצאים ברדיוס של "+ radius + " מטרים מהנקודה הזו").openPopup();
+    radius = e.accuracy / 2;
+    currentLocation = new L.circle(e.latlng, radius, {color: "red", opacity: 0.5, fillColor: '#f03'});
+    map.addLayer(currentLocation);
+
     window.position = {};
     window.position.lng = e.latlng.lng;
     window.position.lat = e.latlng.lat;
@@ -36,7 +38,6 @@ function onLocationError(e) {                                      // tell user 
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
 
 document.getElementById("currentLocationBtn").addEventListener("click",function(){
-                                                                            map.locate({setView: true, maxZoon: 16});
                                                                             addStoryOnCurrentLocation();
                                                                             $("#addStory").modal("toggle");
                                                                             });
@@ -106,7 +107,7 @@ var $form = $('form#storyForm')[0],                             // preapre to th
 
 $("a#spreadsheetUrl").attr("href",config.GOOGLE_SPREADSHEET_URL).attr("target","_blank");
 
-map.locate({setView: true, maxZoon: 16});
+map.locate({setView: true, maxZoom: 16, watch:true, timeout: 10000});
 
 $(document).ready(function(e){
   var jqxhr = $.ajax({                             // call the google spreadsheet to get markers
@@ -125,8 +126,9 @@ $(document).ready(function(e){
 });
 
 function updatePosition() {
-  map.locate({setView: true, maxZoon: 16});
-  setTimeout(updatePosition, 10000);
+  if (typeof(currentLocation) !== "undefined") {
+    map.removeLayer(currentLocation);
+  }
 }
 
 updatePosition();                               // update user current location every
