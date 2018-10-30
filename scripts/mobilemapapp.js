@@ -19,14 +19,19 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 var currentLocation;
 
 
-map.locate({setView: true, maxZoom: 16});
+map.locate({setView: true, maxZoom: 16, watch:true, timeout: 10000});
+
 
 var popup = L.popup();                               // create a pop-up object
 
 function onLocationFound(e) {               // when map loads, try defining user's locaition and show on map (with radius)
+
     radius = e.accuracy / 2;
     currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
     currentLocationMap = new L.circle(currentLocation, radius, {color: "red", opacity: 0.5, fillColor: '#f03'});
+    if (typeof(currentLocation) !== "undefined") {
+      map.removeLayer(currentLocationMap);
+    }
     map.addLayer(currentLocationMap);
 }
 
@@ -112,8 +117,6 @@ $(document).ready(function(e){
         }
       }
   });
-
-  map.locate({setView: false, maxZoom: 16, watch:true, timeout: 10000});
-
+  map.locate({watch:false});
 
 });
