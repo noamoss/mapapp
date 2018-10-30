@@ -44,7 +44,9 @@ function onLocationError(e) {                                      // tell user 
   if (typeof(currentLocationCircle) != "undefined") {  // first, let's clear pre-existing location indicator from map
     map.removeLayer(currentLocationCircle);
   }
-    alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
+  $("#longitude").val(location.lng);
+  $("#latitude").val(location.lat);
+  alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
 }
 
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
