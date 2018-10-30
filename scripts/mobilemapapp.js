@@ -16,20 +16,23 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: mapbox_access_token
 }).addTo(map);
 
-var popup = L.popup();                               // create a pop-up object
 var currentLocation;
+
+
+map.locate({setView: true, maxZoom: 16});
+
+var popup = L.popup();                               // create a pop-up object
 
 function onLocationFound(e) {               // when map loads, try defining user's locaition and show on map (with radius)
     radius = e.accuracy / 2;
-    currentLocation = new L.circle(e.latlng, radius, {color: "red", opacity: 0.5, fillColor: '#f03'});
-    map.addLayer(currentLocation);
-
-    window.position = {};
-    window.position.lng = e.latlng.lng;
-    window.position.lat = e.latlng.lat;
+    currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
+    currentLocationMap = new L.circle(currentLocation, radius, {color: "red", opacity: 0.5, fillColor: '#f03'});
+    map.addLayer(currentLocationMap);
 }
 
 map.on('locationfound', onLocationFound);   // when map is loaded, run onLocationFound if te location is found
+
+
 
 function onLocationError(e) {                                      // tell user their location was not found
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
@@ -38,20 +41,12 @@ function onLocationError(e) {                                      // tell user 
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
 
 document.getElementById("currentLocationBtn").addEventListener("click",function(){
-                                                                            addStoryOnCurrentLocation();
+                                                                            map.locate({setView:true, maxZoom:16});
+                                                                            addStory(currentLocation);
                                                                             $("#addStory").modal("toggle");
                                                                             });
 // function to run when the main button is clicked
 
-
-
-
-function addStoryOnCurrentLocation(loc) {            // add story by the recent user location
-    var lng =   window.position.lng;
-    var lat =   window.position.lat;
-    var location = [lng, lat];
-    addStory(location);
-}
 
 map.on('click', onMapClick);                              // run onMapClick when user clicks the map
 
@@ -84,8 +79,8 @@ $('#submit').on('click', function(e) {       // ajax call to the google spreadsh
 
 
 function addStory(location){                       // when we have the location field, we can set the modal fields values and expose to user input
-  $("#longitude").val(location[0]);
-  $("#latitude").val(location[1]);
+  $("#longitude").val(location.lng);
+  $("#latitude").val(location.lat);
   $("#addStory").modal('show');
 }
 
@@ -101,13 +96,7 @@ function objectifyForm(formArray) {//serialize data function
 var $form = $('form#storyForm')[0],                             // preapre to thhe ajax call to save markers
     writeUrl = config.GOOGLE_SPREADSHEET_TABLE_URL;
 
-
-
-
-
 $("a#spreadsheetUrl").attr("href",config.GOOGLE_SPREADSHEET_URL).attr("target","_blank");
-
-map.locate({setView: true, maxZoom: 16, watch:true, timeout: 10000});
 
 $(document).ready(function(e){
   var jqxhr = $.ajax({                             // call the google spreadsheet to get markers
@@ -123,12 +112,8 @@ $(document).ready(function(e){
         }
       }
   });
+
+  map.locate({setView: false, maxZoom: 16, watch:true, timeout: 10000});
+
+
 });
-
-function updatePosition() {
-  if (typeof(currentLocation) !== "undefined") {
-    map.removeLayer(currentLocation);
-  }
-}
-
-updatePosition();                               // update user current location every
