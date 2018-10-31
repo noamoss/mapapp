@@ -3,14 +3,18 @@ body {
   margin: 0;
 }
 
-html, body, #map {
+html, body {
   direction: rtl;
-  height: 100%;
   width: 100vw;
+}
+
+#map {
+  height: 90vh;
 }
 
 header {
   text-align: center;
+  height: 10vh;
 }
 
 #currentLocationBtn {

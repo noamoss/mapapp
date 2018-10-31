@@ -19,7 +19,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 var currentLocation;
 
 
-map.locate({setView: true, maxZoom: 16, watch:true, timeout: 10000});
+map.locate({setView: true, maxZoom: 16});
 
 
 var popup = L.popup();                               // create a pop-up object
