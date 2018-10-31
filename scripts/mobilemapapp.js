@@ -16,7 +16,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: mapbox_access_token
 }).addTo(map);
 
-var currentLocation;
+var currentLocation = config.DEFAULT_LOCATION;
 
 var firstload = true;
 map.locate({setView: true, maxZoom: 16, watch:false});
@@ -38,6 +38,10 @@ function onLocationFound(e) {               // when map loads, try defining user
   radius = e.accuracy / 2;
   currentLocationCircle = new L.circle(currentLocation, radius, {color: "red", opacity: 0.5, fillColor: '#f03'});
   map.addLayer(currentLocationCircle);
+  $("#longitude").val(location.lng);
+  $("#longitude").attr("readonly",true);
+  $("#latitude").val(location.lat);
+  $("#latitude").attr("readonly",true);
 }
 
 map.on('locationfound', onLocationFound);   // when map is loaded, run onLocationFound if te location is found
@@ -48,8 +52,10 @@ function onLocationError(e) {                                      // tell user 
   if (typeof(currentLocationCircle) != "undefined") {  // first, let's clear pre-existing location indicator from map
     map.removeLayer(currentLocationCircle);
   }
-  $("#longitude").val(location.lng);
-  $("#latitude").val(location.lat);
+  $("#longitude").val(currentLocation.lng);
+  $("#longitude").removeAttr("readonly",true);
+  $("#latitude").val(currentLocation.lat);
+  $("#latitude").removeAttr("readonly",true);
   alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
 }
 
@@ -92,8 +98,11 @@ $('#submit').on('click', function(e) {       // ajax call to the google spreadsh
 
 
 function addStory(location){                       // when we have the location field, we can set the modal fields values and expose to user input
-  $("#longitude").val(location.lng);
-  $("#latitude").val(location.lat);
+  if (typeof(location)!="undefined") {              // if we have concrete location, populate the form's fields
+    $("#longitude").val(location.lng);
+    $("#latitude").val(location.lat);
+    }
+
   $("#addStory").modal('show');
 }
 
