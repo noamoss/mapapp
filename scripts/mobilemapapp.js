@@ -19,7 +19,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 var currentLocation;
 
 var firstload = true;
-map.locate({setView: true, maxZoom: 16});
+map.locate({setView: true, maxZoom: 16, watch:false});
 
 var popup = L.popup();                               // create a pop-up object
 
@@ -121,7 +121,6 @@ $(document).ready(function(e){
         var markers = e.values.slice(1); // ignore the headers                                        //addMarkers(markers);
         for (var i=0; i<=markers.length-1; i++) {
           var marker = L.marker([markers[i][1],markers[i][0]]).addTo(map).bindPopup("<b>הסיפור: </b>"+markers[i][2]);
-          marker;
         }
       }
   });
