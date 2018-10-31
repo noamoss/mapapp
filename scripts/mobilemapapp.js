@@ -18,22 +18,26 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 var currentLocation;
 
-
+var firstload = true;
 map.locate({setView: true, maxZoom: 16});
-
 
 var popup = L.popup();                               // create a pop-up object
 
 function onLocationFound(e) {               // when map loads, try defining user's locaition and show on map (with radius)
+  currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
 
-    if (typeof(currentLocationCircle) != "undefined") {  // first, let's clear pre-existing location indicator from map
-      map.removeLayer(currentLocationCircle);
-    }
+  if (firstload) {                              // center map on user's location only on first load
+    map.setView(currentLocation);
+    firstload = false;
+  }
+
+  if (typeof(currentLocationCircle) != "undefined") {  // first, let's clear pre-existing location indicator from map
+    map.removeLayer(currentLocationCircle);
+  }
                                                                        // now, let's draw the new user's location circle
-    radius = e.accuracy / 2;
-    currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
-    currentLocationCircle = new L.circle(currentLocation, radius, {color: "red", opacity: 0.5, fillColor: '#f03'});
-    map.addLayer(currentLocationCircle);
+  radius = e.accuracy / 2;
+  currentLocationCircle = new L.circle(currentLocation, radius, {color: "red", opacity: 0.5, fillColor: '#f03'});
+  map.addLayer(currentLocationCircle);
 }
 
 map.on('locationfound', onLocationFound);   // when map is loaded, run onLocationFound if te location is found
@@ -62,9 +66,7 @@ document.getElementById("currentLocationBtn").addEventListener("click",function(
 map.on('click', onMapClick);                              // run onMapClick when user clicks the map
 
 function onMapClick(e) {                           // actions to run when map is being clicked
-  var lng = e.latlng.lng;
-  var lat =  e.latlng.lat;
-  var location = [lng, lat];
+  var location = e.latlng;
   addStory(location);
 }
 
@@ -119,7 +121,7 @@ $(document).ready(function(e){
         var markers = e.values.slice(1); // ignore the headers                                        //addMarkers(markers);
         for (var i=0; i<=markers.length-1; i++) {
           var marker = L.marker([markers[i][1],markers[i][0]]).addTo(map).bindPopup("<b>הסיפור: </b>"+markers[i][2]);
-          marker.openPopup();
+          marker;
         }
       }
   });
