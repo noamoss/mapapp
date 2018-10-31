@@ -2,7 +2,7 @@
 var mapbox_access_token = config.MAPBOX_ACCESS_TOKEN;
 
 // create a map instance
-var mymap = L.map('mapid').setView([31.8299292,34.9280298], 8);
+var mymap = L.map('mapid').setView(config.DEFAULT_LOCATION, 8);
 
 // add layer to map
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
