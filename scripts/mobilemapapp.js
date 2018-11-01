@@ -3,7 +3,7 @@
 
 //first import the mapbox access token from the local env, saved in the config.js file
 var mapbox_access_token = config.MAPBOX_ACCESS_TOKEN;
-var currentLocation = new L.LatLng(config.DEFAULT_LOCATION[1],config.DEFAULT_LOCATION[0]);    // we will start with the default location, to speed up the map load
+var currentLocation = new L.LatLng(config.DEFAULT_LOCATION[0],config.DEFAULT_LOCATION[1]);    // we will start with the default location, to speed up the map load
 
 
 // create a map instance object
@@ -52,11 +52,12 @@ map.on('locationfound', onLocationFound);   // when map is loaded, run onLocatio
 function onLocationError(e) {                                      // tell user their location was not found
   if (typeof(currentLocationCircle) != "undefined") {  // first, let's clear pre-existing location indicator from map
     map.removeLayer(currentLocationCircle);
-  }
+    }
   $("#longitude").val(currentLocation.lng);
   $("#longitude").removeAttr("readonly",true);
   $("#latitude").val(currentLocation.lat);
   $("#latitude").removeAttr("readonly",true);
+
   if (firstload) {
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
     map.setView(currentLocation).setZoom(16);
@@ -66,7 +67,8 @@ function onLocationError(e) {                                      // tell user 
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
 
 document.getElementById("currentLocationBtn").addEventListener("click",function(){
-                                                                            map.locate({setView:true, maxZoom:16});
+                                                                            map.locate();
+                                                                            map.setView(currentLocation);
                                                                             addStory(currentLocation);
                                                                             $("#addStory").modal("toggle");
                                                                             });
