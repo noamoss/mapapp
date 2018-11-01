@@ -10,7 +10,6 @@ var currentLocation = new L.LatLng(config.DEFAULT_LOCATION[0], config.DEFAULT_LO
 var map = L.map('map');
 
 // add layer to map
-console.log("current location: ",currentLocation);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 16,
@@ -25,11 +24,9 @@ map.locate({setView: true, maxZoom: 18, watch:true});
 var popup = L.popup();                               // create a pop-up object
 
 function onLocationFound(e) {               // when map loads, try defining user's locaition and show on map (with radius)
-  console.log(e);
   currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
 
   if (firstload) {                              // center map on user's location only on first load
-    console.log("first location: "+firstload);
     map.setView(currentLocation);
     firstload = false;
   }
@@ -59,9 +56,10 @@ function onLocationError(e) {                                      // tell user 
   $("#longitude").removeAttr("readonly",true);
   $("#latitude").val(currentLocation.lat);
   $("#latitude").removeAttr("readonly",true);
-  alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
+  if (firstload) {
+    alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
+  }
 }
-
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
 
 document.getElementById("currentLocationBtn").addEventListener("click",function(){
