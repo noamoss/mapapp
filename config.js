@@ -5,5 +5,5 @@ var config = {
   GOOGLE_SPREADSHEET_TABLE_URL: "https://script.google.com/macros/s/AKfycbx2LalySIFSWX-ct01fwT2f6XaMSiO9bQaqLjOg19y9DXvmztg/exec",
   GOOGLE_SPREADSHEET_API: "AIzaSyCVF-xtgSC2hc0ACsgIzbhSo7j8jgqCimY",
   GOOGLE_SPREADSHEET_URL: "https://docs.google.com/spreadsheets/d/1ucX1MKPmvVbset9evcUCJ8q-Dh_DucMxmhLz76I9kHI/edit#gid=0",
-  DEFAULT_LOCATION: [34,31]
+  DEFAULT_LOCATION: [34.925,31.829]
 };
