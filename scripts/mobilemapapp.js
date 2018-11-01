@@ -59,7 +59,7 @@ function onLocationError(e) {                                      // tell user 
   if (firstload) {
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
     map.setView(currentLocation).setZoom(16);
-
+    firstlad = false;
   }
 }
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
