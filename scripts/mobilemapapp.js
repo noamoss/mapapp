@@ -3,12 +3,14 @@
 
 //first import the mapbox access token from the local env, saved in the config.js file
 var mapbox_access_token = config.MAPBOX_ACCESS_TOKEN;
+var currentLocation = new L.LatLng(config.DEFAULT_LOCATION[0], config.DEFAULT_LOCATION[1]);    // we will start with the default location, to speed up the map load
 
 
 // create a map instance object
 var map = L.map('map');
 
 // add layer to map
+console.log("current location: ",currentLocation);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 16,
@@ -16,10 +18,9 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: mapbox_access_token
 }).addTo(map);
 
-var currentLocation = config.DEFAULT_LOCATION;
 
 var firstload = true;
-map.locate({setView: true, maxZoom: 16, watch:true});
+map.locate({setView: true, maxZoom: 18, watch:true});
 
 var popup = L.popup();                               // create a pop-up object
 
