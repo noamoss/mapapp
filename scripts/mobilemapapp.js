@@ -3,7 +3,7 @@
 
 //first import the mapbox access token from the local env, saved in the config.js file
 var mapbox_access_token = config.MAPBOX_ACCESS_TOKEN;
-var currentLocation = new L.LatLng(config.DEFAULT_LOCATION[0], config.DEFAULT_LOCATION[1]);    // we will start with the default location, to speed up the map load
+var currentLocation = new L.LatLng(config.DEFAULT_LOCATION[1],config.DEFAULT_LOCATION[0]);    // we will start with the default location, to speed up the map load
 
 
 // create a map instance object
@@ -58,6 +58,8 @@ function onLocationError(e) {                                      // tell user 
   $("#latitude").removeAttr("readonly",true);
   if (firstload) {
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
+    map.setView(currentLocation).setZoom(16);
+
   }
 }
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
