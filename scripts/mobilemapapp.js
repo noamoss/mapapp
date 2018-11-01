@@ -7,7 +7,7 @@ var currentLocation = new L.LatLng(config.DEFAULT_LOCATION[1],config.DEFAULT_LOC
 
 
 // create a map instance object
-var map = L.map('map');
+var map = L.map('map', {inertia: false});
 
 // add layer to map
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
