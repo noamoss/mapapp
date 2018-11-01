@@ -27,6 +27,7 @@ function onLocationFound(e) {               // when map loads, try defining user
   currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
 
   if (firstload) {                              // center map on user's location only on first load
+    currentLocation = L.LatLng(config.DEFAULT_LOCATION[1],config.DEFAULT_LOCATION[0]);
     map.setView(currentLocation);
     firstload = false;
   }
@@ -58,7 +59,7 @@ function onLocationError(e) {                                      // tell user 
   $("#latitude").removeAttr("readonly",true);
   if (firstload) {
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
-    map.setView(currentLocation).setZoom(16);
+    map.setView(L.LatLng(config.DEFAULT_LOCATION[1],config.DEFAULT_LOCATION[0])).setZoom(16);
     firstlad = false;
   }
 }
