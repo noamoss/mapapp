@@ -27,7 +27,7 @@ function onLocationFound(e) {               // when map loads, try defining user
   currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
 
   if (firstload) {                              // center map on user's location only on first load
-    currentLocation = L.LatLng(config.DEFAULT_LOCATION[1],config.DEFAULT_LOCATION[0]);
+    console.log("location found on first load: "+currentLocation);
     map.setView(currentLocation);
     firstload = false;
   }
@@ -133,7 +133,10 @@ $(document).ready(function(e){
       function(e) {
         var markers = e.values.slice(1); // ignore the headers                                        //addMarkers(markers);
         for (var i=0; i<=markers.length-1; i++) {
-          var marker = L.marker([markers[i][1],markers[i][0]]).addTo(map).bindPopup("<b>הסיפור: </b>"+markers[i][2]);
+          var lat = parseFloat(markers[i][1]);
+          var lng = parseFloat(markers[i][0]);
+          var marker = L.marker([lat,lng]);
+          marker.addTo(map).bindPopup("<b>הסיפור: </b>"+markers[i][2]);
         }
       }
   });
