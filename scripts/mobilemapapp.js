@@ -27,8 +27,8 @@ function onLocationFound(e) {               // when map loads, try defining user
   currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
 
   if (firstload) {                              // center map on user's location only on first load
-    map.setView(currentLocation).setZoom(16);
     console.log("location found on first load: "+currentLocation);
+    map.setView(currentLocation).setZoom(16);
     firstload = false;
   }
 
@@ -60,7 +60,7 @@ function onLocationError(e) {                                      // tell user 
   if (firstload) {
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
     map.setView(currentLocation).setZoom(16);
-    firstlad = false;
+    firstload = false;
   }
 }
 map.on('locationerror', onLocationError);  // when map is loaded, run onLocationError if the location isn't found
