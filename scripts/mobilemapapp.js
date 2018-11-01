@@ -28,7 +28,7 @@ function onLocationFound(e) {               // when map loads, try defining user
 
   if (firstload) {                              // center map on user's location only on first load
     console.log("location found on first load: "+currentLocation);
-    map.setView(currentLocation).setZoom(16);
+    map.setView(currentLocation,16);
     firstload = false;
   }
 
@@ -60,7 +60,7 @@ function onLocationError(e) {                                      // tell user 
 
   if (firstload) {
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
-    map.setView(currentLocation).setZoom(16);
+    map.setView(currentLocation,16);
     firstload = false;
   }
 }
@@ -68,7 +68,7 @@ map.on('locationerror', onLocationError);  // when map is loaded, run onLocation
 
 document.getElementById("currentLocationBtn").addEventListener("click",function(){
                                                                             map.locate();
-                                                                            map.setView(currentLocation);
+                                                                            map.setView(currentLocation, 16);
                                                                             addStory(currentLocation);
                                                                             $("#addStory").modal("toggle");
                                                                             });
