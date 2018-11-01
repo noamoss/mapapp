@@ -7,7 +7,7 @@ var currentLocation = new L.LatLng(config.DEFAULT_LOCATION[1],config.DEFAULT_LOC
 
 
 // create a map instance object
-var map = L.map('map', {inertia: false});
+var map = L.map('map');
 
 // add layer to map
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -27,8 +27,8 @@ function onLocationFound(e) {               // when map loads, try defining user
   currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
 
   if (firstload) {                              // center map on user's location only on first load
+    map.setView(currentLocation).setZoom(16);
     console.log("location found on first load: "+currentLocation);
-    map.setView(currentLocation);
     firstload = false;
   }
 
