@@ -11,7 +11,7 @@ var map = L.map('map');
 // add layer to map
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    maxZoom: 18,
+    maxZoom: 16,
     id: 'mapbox.streets',
     accessToken: mapbox_access_token
 }).addTo(map);
@@ -19,14 +19,16 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 var currentLocation = config.DEFAULT_LOCATION;
 
 var firstload = true;
-map.locate({setView: true, maxZoom: 16, watch:false});
+map.locate({setView: true, maxZoom: 16, watch:true});
 
 var popup = L.popup();                               // create a pop-up object
 
 function onLocationFound(e) {               // when map loads, try defining user's locaition and show on map (with radius)
+  console.log(e);
   currentLocation = new L.LatLng(e.latlng.lat, e.latlng.lng);
 
   if (firstload) {                              // center map on user's location only on first load
+    console.log("first location: "+firstload);
     map.setView(currentLocation);
     firstload = false;
   }
