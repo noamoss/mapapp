@@ -59,7 +59,7 @@ function onLocationError(e) {                                      // tell user 
   $("#latitude").removeAttr("readonly",true);
   if (firstload) {
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
-    map.setView(L.LatLng(config.DEFAULT_LOCATION[1],config.DEFAULT_LOCATION[0])).setZoom(16);
+    map.setView(currentLocation).setZoom(16);
     firstlad = false;
   }
 }
