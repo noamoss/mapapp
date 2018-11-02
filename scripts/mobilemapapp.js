@@ -39,10 +39,12 @@ function onLocationFound(e) {               // when map loads, try defining user
   radius = e.accuracy / 2;
   currentLocationCircle = new L.circle(currentLocation, radius, {color: "red", opacity: 0.5, fillColor: '#f03'});
   map.addLayer(currentLocationCircle);
-  $("#longitude").val(location.lng);
-  $("#longitude").attr("readonly",true);
-  $("#latitude").val(location.lat);
-  $("#latitude").attr("readonly",true);
+if (($("#addStory").attr("class") != "modal show") || !(firstload)) {          // prevent field values changes on modal fields if it is currently visible to user (open)
+    $("#longitude").val(location.lng);
+    $("#longitude").attr("readonly",true);
+    $("#latitude").val(location.lat);
+    $("#latitude").attr("readonly",true);
+}
 }
 
 map.on('locationfound', onLocationFound);   // when map is loaded, run onLocationFound if te location is found
@@ -53,10 +55,13 @@ function onLocationError(e) {                                      // tell user 
   if (typeof(currentLocationCircle) != "undefined") {  // first, let's clear pre-existing location indicator from map
     map.removeLayer(currentLocationCircle);
     }
-  $("#longitude").val(currentLocation.lng);
-  $("#longitude").removeAttr("readonly",true);
-  $("#latitude").val(currentLocation.lat);
-  $("#latitude").removeAttr("readonly",true);
+
+
+    $("#longitude").val(currentLocation.lng);
+    $("#longitude").removeAttr("readonly",true);
+    $("#latitude").val(currentLocation.lat);
+    $("#latitude").removeAttr("readonly",true);
+
 
   if (firstload) {
     alert("האפליקציה לא הצליחה לאתר את המיקום המדוייק שלך");
@@ -94,7 +99,7 @@ $('#submit').on('click', function(e) {       // ajax call to the google spreadsh
     function() {
         alert("הסיפור נשמר!");        // update user the item was saved
         $("#addStory").modal('hide'); // close modal only after saving confimration
-        var marker = L.marker([toSave.latitude, toSave.longitude]).addTo(map).bindPopup("<b>הסיפור: </b>"+toSave.storyField); // add manually the new marker to the map
+        var marker = L.marker({lat: toSave.latitude, lng: toSave.longitude}).addTo(map).bindPopup("<b>הסיפור: </b>"+toSave.storyField); // add manually the new marker to the map
         marker.openPopup(); // show the new marker on the map
         $("#storyField.input").val(""); // clear the form field(s) for the next time
       }
@@ -135,10 +140,13 @@ $(document).ready(function(e){
       function(e) {
         var markers = e.values.slice(1); // ignore the headers                                        //addMarkers(markers);
         for (var i=0; i<=markers.length-1; i++) {
-          var lat = parseFloat(markers[i][1]);
-          var lng = parseFloat(markers[i][0]);
-          var marker = L.marker([lat,lng]);
-          marker.addTo(map).bindPopup("<b>הסיפור: </b>"+markers[i][2]);
+          var marker_lat = parseFloat(markers[i][0]);
+          var marker_lng = parseFloat(markers[i][1]);
+          if ((!isNaN(marker_lat)) && (!isNaN(marker_lng)))  {               // verify valid marker data was exported
+            console.log(typeof(marker_lat));
+            var marker = L.marker([markers[i][1],markers[i][0]]);
+            marker.addTo(map).bindPopup("<b>הסיפור: </b>"+markers[i][2]);
+          }
         }
       }
   });
