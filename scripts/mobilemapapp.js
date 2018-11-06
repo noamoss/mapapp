@@ -17,6 +17,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
     accessToken: mapbox_access_token
 }).addTo(map);
 
+map.setView(currentLocation, 16);             // first load on default location
 
 var firstload = true;
 map.locate({setView: true, maxZoom: 18, watch:true});
