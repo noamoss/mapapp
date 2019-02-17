@@ -1,4 +1,6 @@
 const talkButton = document.getElementById('talk');
+const speechIndicator = document.getElementById('speechIndication');
+
 
 talkButton.addEventListener('click',  () => {
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -7,6 +9,8 @@ const recognition = new SpeechRecognition();
 
 recognition.interimResults = true;
 recognition.lang="he";
+
+speechIndicator.innerText = "דבר/י, אנחנו כותבים";
 
 let p = document.createElement('p');
 const story = document.querySelector('#storyField');
@@ -28,6 +32,6 @@ recognition.addEventListener('result', e=> {
 
 });
 
-recognition.addEventListener('end', recognition.start);
+recognition.addEventListener('end', () => {speechIndicator.innerText="";});
 recognition.start()
 });
