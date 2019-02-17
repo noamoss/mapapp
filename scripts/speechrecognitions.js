@@ -1,37 +1,49 @@
 const talkButton = document.getElementById('talk');
 const speechIndicator = document.getElementById('speechIndication');
 
-
-talkButton.addEventListener('click',  () => {
 window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
 const recognition = new SpeechRecognition();
+const story = document.querySelector('#storyField');
 
 recognition.interimResults = true;
 recognition.lang="he";
 
-speechIndicator.innerText = "דבר/י, אנחנו כותבים";
 
-let p = document.createElement('p');
-const story = document.querySelector('#storyField');
+var talk=true;
 
-recognition.addEventListener('result', e=> {
-  const transcript = Array.from(e.results)
-  .map(result => result[0])
-  .map(result => result.transcript)
-  .join('');
-  console.log(transcript);
+const changeTalkStatus = function() {
+  talk = !talk;
 
-  if(e.results[0].isFinal) {
-    story.value = transcript;
+  if (talk==true) {
+    speechIndicator.innerText = "דבר/י, אנחנו כותבים";
+    recognition.start();
+    recognition.addEventListener('result', e=> {
+      const transcript = Array.from(e.results)
+      .map(result => result[0])
+      .map(result => result.transcript)
+      .join('');
+      console.log(transcript);
+
+      if(e.results[0].isFinal) {
+        story.value = transcript;
+      }
+
+      if(transcript.includes('שליחה')) {
+        console.log("שליחה");
+      }
+
+  });
+
+  recognition.addEventListener('end', () =>
+        {
+          recognition.stop();
+          speechIndicator.innerText = "";
+        })}
+
+  else {
+    speechIndicator.innerText = "";
+    recognition.stop();
   }
+};
 
-  if(transcript.includes('שליחה')) {
-    console.log("שליחה");
-  }
-
-});
-
-recognition.addEventListener('end', () => {speechIndicator.innerText="";});
-recognition.start()
-});
+document.addEventListener('click', changeTalkStatus);
