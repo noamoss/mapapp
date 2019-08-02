@@ -25,7 +25,7 @@ T.B.A
 ## Future Development
 T.B.A
 
-## Whoe sould I contact?
+## Who sould I contact?
 - [The Pitz Website](https://tepitz.io)
 - [On Github](https://github.com/noamoss)
 - [On Twitter](https://twitter.com/pitz_te)
