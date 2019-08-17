@@ -10,13 +10,22 @@ function addPostsBody(topic) {
     $.getJSON(settings.url, function(response){
         // check for the topic body, for lan/lat data
           if('post_stream' in response) {
-            topic['body'] = response.post_stream.posts[0].cooked;
-            let extractedLngLat = topic['body'].match(/קו אורך:\s+(?<lng>\d+\.\d+)<br>\nקו רוחב:\s+(?<lat>\d+\.\d+)/);
-            if ( extractedLngLat !== null && "lng" in extractedLngLat.groups && "lat" in extractedLngLat.groups) {
+            topic['body'] = response.post_stream.posts[0].cooked.replace('<br>','').replace('\n','');
+            const matchArray = topic['body'].match(/.+קו אורך:\s*(\d+\.\d+).+קו רוחב:\s+(\d+\.\d+)/)
+            let extractedLngLat = {};
+            if(matchArray !== null && typeof(matchArray[1]) !== 'undefined') {
+              extractedLngLat['lng'] = matchArray[1];
+            };
+            if(matchArray !== null && typeof(matchArray[2]) !== 'undefined') {
+              extractedLngLat['lat'] = matchArray[2];
+            };
+
+            if ( extractedLngLat !==  {} && "lng" in extractedLngLat && "lat" in extractedLngLat) {
                 topic["location"] = {};
-                topic["location"]['lng'] = extractedLngLat.groups["lng"];
-                topic["location"]['lat'] = extractedLngLat.groups["lat"];
-                return topic;
+                topic["location"]['lng'] = extractedLngLat["lng"];
+                topic["location"]['lat'] = extractedLngLat["lat"];
+                console.log(topic);
+                return topic["location"];
             }
           }
       });
@@ -31,7 +40,9 @@ function getTopics() {
         }}).done(function(resp){
                 let topics = resp.topic_list.topics.slice(1); // ignore the intro topic
                 topics.map(addPostsBody);
-                console.log(topics);
+                topics = Object.keys(topics).map(function(key) {
+                    return topics[key];
+                });
                 return topics;
         });
     }

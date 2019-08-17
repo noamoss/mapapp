@@ -42,6 +42,7 @@ $(document).ready(function (e) {
     }
   });
 
-  var topics = getTopics();
+    var topics = getTopics();
+    console.log(topics);
 
 });
