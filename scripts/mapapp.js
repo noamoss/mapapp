@@ -1,4 +1,6 @@
-//first import the mapbox access token from the local env, saved in the config.js file
+import {getSitesData} from './discourse_api.js'
+
+//import the mapbox access token from the local env, saved in the config.js file
 var mapbox_access_token = config.MAPBOX_ACCESS_TOKEN;
 
 
@@ -27,8 +29,11 @@ mymap.on('click', onMapClick);
 
 $("a#spreadsheetUrl").attr("href", config.GOOGLE_SPREADSHEET_URL).attr("target", "_blank");
 
+getSitesData().then((x)=>console.log(x));
 
 $(document).ready(function (e) {
+
+
   var jqxhr = $.ajax({ // call the google spreadsheet to get markers
     url: "https://sheets.googleapis.com/v4/spreadsheets/1ucX1MKPmvVbset9evcUCJ8q-Dh_DucMxmhLz76I9kHI/values/stories?key=" + config.GOOGLE_SPREADSHEET_API,
     method: "GET",
@@ -42,7 +47,5 @@ $(document).ready(function (e) {
     }
   });
 
-    var topics = getTopics();
-    console.log(topics);
 
 });
